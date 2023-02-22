@@ -1,5 +1,3 @@
-const { projects, clients } = require('../sampleData.js');
-
 
 //Mongoose Models
 const Product = require('../models/Product');
@@ -11,7 +9,8 @@ const {
     GraphQLID, 
     GraphQLString, 
     GraphQLSchema, 
-    GraphQLList
+    GraphQLList,
+    GraphQLNonNull
 } = require ('graphql');
 
 const ProductType = new GraphQLObjectType({
@@ -47,8 +46,75 @@ const RootQuery = new GraphQLObjectType({
 });
 
 
+//Mutations
+const myMutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields:{
+        //Add Product
+        addProduct:{
+            type: ProductType,
+            args: {
+                category: { type: GraphQLNonNull(GraphQLString)},
+                name: { type: GraphQLNonNull(GraphQLString)},
+                brand: { type: GraphQLNonNull(GraphQLString)},
+                description: { type: GraphQLNonNull(GraphQLString)},
+                picture: { type: GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parent, args){
+                const product = new Product({
+                    category: args.category,
+                    name: args.name,
+                    brand: args.brand,
+                    description: args.description,
+                    picture: args.picture
+                });
+                return product.save();
+            }
+        },
+        //Delete product
+        deleteProduct:{
+            type: ProductType,
+            args:{
+                id : { type: GraphQLNonNull(GraphQLID)}
+            },
+            resolve(parent, args){
+                return Product.findByIdAndRemove(args.id);
+            }
+        },
+        //Update product
+        updateProduct:{
+            type: ProductType,
+            args:{
+                id: { type: GraphQLNonNull(GraphQLID)},
+                category: {type : GraphQLNonNull(GraphQLString)},
+                name: {type : GraphQLNonNull(GraphQLString)},
+                brand: {type : GraphQLNonNull(GraphQLString)},
+                description: {type : GraphQLNonNull(GraphQLString)},
+                picture: {type : GraphQLNonNull(GraphQLString)}
+            },
+            resolve(parent, args){
+                return Product.findByIdAndUpdate(args.id,
+                        {
+                            $set:{
+                                category: args.category,
+                                name: args.name,
+                                brand: args.brand,
+                                description: args.description,
+                                picture: args.picture
+                            }
+                        },
+                        {
+                            new: true //if ID/product is not present, it will save as new product
+                        }
+                    );
+            }
+        }
+    }
+});
+
 
 module.exports = new GraphQLSchema({
     query: RootQuery,
+    mutation: myMutation,
 });
 
