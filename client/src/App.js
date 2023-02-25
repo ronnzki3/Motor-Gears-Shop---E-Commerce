@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
+
+import Header from './components/Header';
+import Home from './pages/Home';
+import Page404 from './pages/Page404';
+import Product from './pages/Product';
+import Banner from './components/Banner';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:5000/graphql',
+  cache: new InMemoryCache(),
+})
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <ApolloProvider client={client}>
+          <Router>
+            <Header />
+            <Banner />
+              <Routes>
+                 <Route path="/" element={<Home />} />
+                 <Route path="/product/:id" element={<Product />} />
+                 <Route path="*" element={<Page404 />} />
+              </Routes>
+          </Router>
+        </ApolloProvider>
+    </>
+    
   );
 }
 

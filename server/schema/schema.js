@@ -32,7 +32,7 @@ const RootQuery = new GraphQLObjectType({
         products:{
             type: new GraphQLList(ProductType),
             resolve(parent, args){
-                return Product.find(); //Find all Products List
+                return Product.find(); //MongooDB queries, Find all Products List
             }
         },
         product: {
