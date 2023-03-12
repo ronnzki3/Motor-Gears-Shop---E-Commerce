@@ -1,11 +1,12 @@
+import "react-toastify/dist/ReactToastify.css"
+
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
-
+import {ToastContainer} from 'react-toastify';
 import Header from './components/Header';
 import Home from './pages/Home';
 import Page404 from './pages/Page404';
 import Product from './pages/Product';
-import Banner from './components/Banner';
 
 const client = new ApolloClient({
   uri: 'http://localhost:5000/graphql',
@@ -17,8 +18,8 @@ function App() {
     <>
         <ApolloProvider client={client}>
           <Router>
+            <ToastContainer />
             <Header />
-            <Banner />
               <Routes>
                  <Route path="/" element={<Home />} />
                  <Route path="/product/:id" element={<Product />} />

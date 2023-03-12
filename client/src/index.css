@@ -27,6 +27,9 @@ code {
   background-size: cover;
   -o-background-size: cover;
 }
+.containerFluid{
+  padding: 0 !important;
+}
 .bgCard{
   background-color: var(--bs-blue-card);
 }
