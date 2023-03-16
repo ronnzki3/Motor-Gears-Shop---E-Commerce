@@ -5,4 +5,4 @@
 > React JS \
 > Node JS \
 > GraphQL \
-> Redux \
+> Redux 
