@@ -1,4 +1,4 @@
-# E-Commerce Site for Motor Gears Shop
+# E-Commerce Site for Motorcycle Gears Shop
 
 > MongoDB \
 > Express \
