@@ -29,14 +29,55 @@ const cartSlice = createSlice({
                     position:"top-right",
                 });
             }
-
             localStorage.setItem("cartItems",JSON.stringify(state.cartItems));
             
         },
+        removeFromCart(state,action){
+            const itemsLeftInCart = state.cartItems.filter(
+                (cartItem) => cartItem.id !== action.payload.id
+            );
+            state.cartItems=itemsLeftInCart;            
+            toast.error(`${action.payload.name} removed from cart`,{
+                position:"top-right",
+            });
+            localStorage.setItem("cartItems",JSON.stringify(state.cartItems));
+        },
+        decreaseCartQty(state,action){
+            const itemIndex=state.cartItems.findIndex(
+                (cartItem) => cartItem.id === action.payload.id
+            );
+
+            if(state.cartItems[itemIndex].cartQuantity>1){
+                state.cartItems[itemIndex].cartQuantity -=1;                
+            }else if(state.cartItems[itemIndex].cartQuantity ===1){
+                const itemsLeftInCart = state.cartItems.filter(
+                    (cartItem) => cartItem.id !== action.payload.id
+                );
+                state.cartItems=itemsLeftInCart;                
+                toast.error(`${action.payload.name} removed from cart`,{
+                    position:"top-right",
+                });                
+                localStorage.setItem("cartItems",JSON.stringify(state.cartItems));
+            }
+        },
+        addCartQty(state,action){
+            const itemIndex=state.cartItems.findIndex(
+                (cartItem) => cartItem.id === action.payload.id
+            );
+            state.cartItems[itemIndex].cartQuantity +=1;    
+            localStorage.setItem("cartItems",JSON.stringify(state.cartItems));
+        },
+        clearCart(state,action){
+            state.cartItems=[];            
+            toast.error(`Cart cleared.`,{
+                position:"top-right",
+            });
+            localStorage.setItem("cartItems",JSON.stringify(state.cartItems));
+        }
     },
 });
 
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, decreaseCartQty, addCartQty, clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Home from './pages/Home';
 import Page404 from './pages/Page404';
 import Product from './pages/Product';
+import Cart from "./pages/Cart";
 
 const client = new ApolloClient({
   uri: 'http://localhost:5000/graphql',
@@ -24,6 +25,7 @@ function App() {
                  <Route path="/" element={<Home />} />
                  <Route path="/product/:id" element={<Product />} />
                  <Route path="*" element={<Page404 />} />
+                 <Route path="/cart" element={<Cart />} />
               </Routes>
           </Router>
         </ApolloProvider>
